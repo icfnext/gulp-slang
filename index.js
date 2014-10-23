@@ -82,8 +82,7 @@ function slang(dest, opt) {
                 });
             } else {
                 // generic error most often given with username and password
-                gutil.log(errorbold('File Upload Failed -
-                    Check Username and Password'));
+                gutil.log(errorbold('File Upload Failed - Check Username and Password'));
             }
 
             cb(null, file);
