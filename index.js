@@ -47,7 +47,7 @@ function slang(dest, opt) {
         // sling.apache.org/documentation/bundles/manipulating-content-the-slingpostservlet-servlets-post.html#file-uploads
         curl(URL, {
             MULTIPART: [
-                { name: '*', file: file.path, type: 'file' },
+                { name: '*', file: file.path },
                 { name: '*@TypeHint', contents: 'nt:file' }
             ]
         }, function(e) {
