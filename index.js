@@ -1,4 +1,3 @@
-var curl        = require('node-curl');
 var gutil       = require('gulp-util');
 var path        = require('path');
 var through     = require('through2');
@@ -18,7 +17,7 @@ var gray        = chalk.gray;
 function slang(file, opt) {
     // if no options passed, create options object
     if (!opt) opt = {};
-    
+        
     // Set defaults for options
     var HOST        = opt.host || 'localhost';
     var PORT        = opt.port || 4502;
@@ -41,7 +40,6 @@ function slang(file, opt) {
     
     var r = request.post( URL , function optionalCallback (err, httpResponse, body) {
 
-        var status = httpResponse.status;
         
         if (err) {
             return deferred.reject( err );
