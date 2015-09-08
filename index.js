@@ -1,9 +1,8 @@
-var curl = require('node-curl');
 var gutil = require('gulp-util');
 var path = require('path');
 var through = require('through2');
-var jsdom = require('jsdom');
 var chalk = require('chalk');
+var request = require('request');
 
 // Colors
 var errorbold = chalk.bold.red;
@@ -21,8 +20,9 @@ function slang(dest, opt) {
     var USER = opt.username || 'admin';
     var PASS = opt.password || 'admin';
     var URL;
+
     // return stream to gulp
-    return through.obj(function(file, enc, cb) {
+    var stream = through.obj(function(file, enc, cb) {
         if (file.isNull()) {
             cb(new gutil.PluginError('gulp-slang', 'No file passed'));
             return;
@@ -41,54 +41,55 @@ function slang(dest, opt) {
 
         // create full URL for curl path
         URL = 'http://' + USER + ':' + PASS + '@' +
-            HOST + ':' + PORT + '/' + path.dirname(destPath);
+            HOST + ':' + PORT + '/' + path.dirname(destPath) + ".json";
 
-        // curl post multi-part form following sling's upload documentation
-        // sling.apache.org/documentation/bundles/manipulating-content-the-slingpostservlet-servlets-post.html#file-uploads
-        curl(URL, {
-            MULTIPART: [
-                { name: '*', file: file.path },
-                { name: '*@TypeHint', contents: 'nt:file' }
-            ]
-        }, function(e) {
-            if (e) {
-                return console.error('upload failed:', e);
+        var options = {
+            url: URL,
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json'
             }
-            var body = this.body;
+        };
 
-            if (body.length) {
-                // use jsdom to read response HTML and display relevant messages
-                jsdom.env(body, [], function(err, window) {
-                    var status = window.document.getElementById('Status') ?
-                        window.document.getElementById('Status').textContent :
-                        '201';
-                    var message = window.document.getElementById('Message') ?
-                        window.document.getElementById('Message').textContent :
-                        'File Created';
-                    var location = window.document.getElementById('Location') ?
-                        window.document.getElementById('Location').textContent :
-                        file.path;
+        function optionalCallback (err, httpResponse, responseBody) {
+            if (err) {
+                gutil.log(errorbold('File Upload Failed'));
+            }
 
-                    if (status === '200' || status === '201') {
-                        gutil.log(allgoodbold('File Upload Successful: ') +
-                            allgood(status) + ' - ' + allgood(message));
-                        gutil.log(gray('Uploaded To: ') + gray(location));
-                    } else {
-                        gutil.log(errorbold('File Upload Failed: ') +
-                            error(status) + ' - ' + error(message));
-                    }
-                    // close jsdom window
-                    window.close();
-                });
-            } else {
+            try {
+                var response = JSON.parse( responseBody );
+
+                var status = response['status.code'] ? response['status.code'] : 201;
+                var message = response['status.message'] ? response['status.message'] : 'File Created';
+                var location = response.location ? response.location : file.path;
+
+                if (status === 200 || status === 201 ) {
+                    gutil.log( allgoodbold('File Upload Successful to port ') + allgood(PORT) + allgood(" : ") +
+                        allgood(status) + ' - ' + allgood(message));
+                    gutil.log(gray('Uploaded To: ') + gray(location));
+                } else {
+                    gutil.log(errorbold('File Upload Failed: ') +
+                        error(status) + ' - ' + error(message));
+                }
+            } catch(err) {
                 // generic error most often given with username and password
                 gutil.log(errorbold('File Upload Failed - Check Username and Password'));
             }
 
+            // deferred.resolve( responseBody);
             cb(null, file);
 
-        });
+        };
+
+        var r = request(options , optionalCallback).auth(USER, PASS);
+
+        var form = r.form();
+
+        form.append('*', fs.createReadStream(file.path));
+        form.append('@TypeHint', "nt:file");
     });
+
+    return stream;
 }
 
 module.exports = slang;

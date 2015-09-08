@@ -1,6 +1,6 @@
 {
   "name": "gulp-slang",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Curl files to JCR using Sling",
   "license": "MIT",
   "author": {
@@ -10,6 +10,11 @@
   },
   "scripts": {
     "test": "test"
+  },
+  "repository" :
+  {
+      "type" : "git",
+      "url" : "https://github.com/mnlsn/gulp-slang.git"
   },
   "files": [
     "index.js"
@@ -22,13 +27,12 @@
     "CQ"
   ],
   "dependencies": {
-    "chalk": "^0.5.1",
-    "gulp-util": "^3.0.1",
-    "jsdom": "^1.0.0-pre.6",
-    "node-curl": "^0.3.3",
-    "through2": "^0.6.1"
+    "chalk": "^1.1.1",
+    "gulp-util": "^3.0.6",
+    "request": "^2.61.0",
+    "through2": "^2.0.0"
   },
   "devDependencies": {
-    "gulp": "^3.8.8"
+    "gulp": "^3.9.0"
   }
 }
