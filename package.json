@@ -1,6 +1,6 @@
 {
   "name": "gulp-slang",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Curl files to JCR using Sling",
   "license": "MIT",
   "author": {

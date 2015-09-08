@@ -3,6 +3,7 @@ var path = require('path');
 var through = require('through2');
 var chalk = require('chalk');
 var request = require('request');
+var fs = require('fs');
 
 // Colors
 var errorbold = chalk.bold.red;
