@@ -12,7 +12,7 @@ var allgood = chalk.green;
 var allgoodbold = chalk.bold.green;
 var gray = chalk.gray;
 
-function slang(dest, opt) {
+function slang(opt) {
     // if no options passed, create options object
     if (!opt) opt = {};
     // Set defaults for options
