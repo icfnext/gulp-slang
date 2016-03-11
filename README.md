@@ -16,8 +16,7 @@ Curl files to running JCR
 
     gulp.task('watch', function() {
         gulp.watch('js/*.js', function(e) {
-            var path = e.path;
-            return gulp.src(path)
+            return gulp.src()
                 .pipe(slang({
                     port: 4503
                 }));
