@@ -42,7 +42,7 @@ function slang(opt) {
 
         // create full URL for curl path
         URL = 'http://' + USER + ':' + encodeURIComponent(PASS) + '@' +
-            HOST + ':' + PORT + '/' + path.dirname(destPath);
+            HOST + ':' + PORT + '/' + path.dirname(destPath) + ".json";
 
         var options = {
             url: URL,
