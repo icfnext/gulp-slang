@@ -11,10 +11,9 @@
   "scripts": {
     "test": "test"
   },
-  "repository" :
-  {
-      "type" : "git",
-      "url" : "https://github.com/mnlsn/gulp-slang.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mnlsn/gulp-slang.git"
   },
   "files": [
     "index.js"
@@ -27,12 +26,9 @@
     "CQ"
   ],
   "dependencies": {
-    "chalk": "^1.1.1",
-    "gulp-util": "^3.0.6",
+    "plugin-error": "^1.0.1",
     "request": "^2.61.0",
+    "signale": "^1.2.1",
     "through2": "^2.0.0"
-  },
-  "devDependencies": {
-    "gulp": "^3.9.0"
   }
 }
